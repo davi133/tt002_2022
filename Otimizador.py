@@ -100,7 +100,7 @@ class Otimizador:
         pointer=0
         while delta_ms < time_ms:
             delta_ms = round(time.time() * 1000) - tin
-            candidates = [random.randrange(0, size_rota) for a in range(candidates_qtd)]
+            candidates = [random.randrange(0, size_rota) for a in range(3)]
             menor =-1
             menor_dist=9000000
             for i in candidates:
