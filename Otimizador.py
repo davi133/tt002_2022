@@ -57,10 +57,12 @@ class Otimizador:
             compr_y += [minComprimento]
         self.plt.xlabel("Tempo(ms)")
         self.plt.ylabel("Comprimento (pixel)")
-        self.plt.title("Teste Single Swap")
+        self.plt.title("Comprimento versus tempo(ms)")
         self.plt.plot(tempo_x, compr_y, color='#000000', label="SingleSwap")
 
     def aleatorio(self, rota: Rota, time_ms: int):
+        tempo_x = []
+        compr_y = []
         # inicia a partir de uma rota não otimizada
         rota.shuffle()
         tin = round(time.time() * 1000)
@@ -73,6 +75,9 @@ class Otimizador:
             if rotaAux.comprimento() < minComprimento:
                 rota.pontos = rotaAux.pontos
                 minComprimento = rota.comprimento()
+            tempo_x += [delta_ms]
+            compr_y += [minComprimento]
+        self.plt.plot(tempo_x, compr_y, color='#0A0', label="Random")
 
     # Aqui você deve usar sua criatividade e propor um algoritmo de
     # otimização. O algoritmo deixado é apenas um exemplo.
@@ -83,22 +88,41 @@ class Otimizador:
     # ser composto de um nome dos integrantes. Exemplo:
     # Rodrigo_Ivan_Celso
     def otimizadorGrupo1(self, rota: Rota, time_ms: int):
+        tempo_x = []
+        compr_y = []
         # inicia a partir de uma rota não otimizada
         rota.shuffle()
         tin = round(time.time() * 1000)
         delta_ms = round(time.time() * 1000) - tin
         minComprimento = rota.comprimento()
+        size_rota = len(rota.pontos)
+        candidates_qtd = max(round(size_rota * .01), 3)
+        pointer=0
         while delta_ms < time_ms:
             delta_ms = round(time.time() * 1000) - tin
-            size_rota = len(rota.pontos)
-            pos1 = random.randrange(0, size_rota)
-            pos2 = random.randrange(0, size_rota)
+            candidates = [random.randrange(0, size_rota) for a in range(candidates_qtd)]
+            menor =-1
+            menor_dist=9000000
+            for i in candidates:
+                dist = rota.pontos[pointer].distancia(rota.pontos[i])
+                if dist < menor_dist:
+                    menor_dist = dist
+                    menor = i
+
+            pos1 = pointer
+            pos2 = menor
             swap(rota, pos1, pos2)
+
+            pointer+=1
+            pointer= pointer % (len(rota.pontos))
             if rota.comprimento() < minComprimento:
                 minComprimento = rota.comprimento()
             else:
                 swap(rota, pos1, pos2)
+            tempo_x += [delta_ms]
+            compr_y += [minComprimento]
 
+        self.plt.plot(tempo_x,compr_y, color='#00A', label="otimizadorGrupo1")
     # Esta função deve salvar o gráfico. A função não deve ser alterada.
     # O objetivo final é colocar vários algoritmos vindos de grupos diferentes
     # num mesmo gráfico e depois esta função irá salvar a solução com todos os gráficos.
