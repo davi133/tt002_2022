@@ -59,7 +59,7 @@ class BateriaTestes:
             opt = Otimizador()
             for otimizador in self.funcoes:
                 otimizador[0](rota_original, tempo_ms)
-            opt.salvaFigura("teste_" + str(size) + ".png")
+            opt.salvaFigura(f"Otimizacao_{size}.png")
             opt.cleanGraph()
 
         todas_medias = dict()
@@ -84,7 +84,6 @@ class BateriaTestes:
 
     def __makeGraph(self,medias,desvios,labels):
         plt.clf()
-        plt.style.use("ggplot")
         fig, ax = plt.subplots()
         ax.set_ylabel('Custo')
 
@@ -92,16 +91,19 @@ class BateriaTestes:
         ax.set_xticks(x, labels)
 
         width = 0.5  # the width of the bars
-
         total_width = width / len(medias)
         i = 0
         for key in medias:
+            print(f"label is ={key}")
             ax.bar(x - total_width / 2 + (i * total_width), medias[key], total_width,yerr=desvios[key], label=key, error_kw=dict(lw=1, capsize=5, capthick=1))
+            #ax.bar(x - total_width / 2 + (i * total_width), medias[key], total_width, label=key, )
             i += 1
 
-        # Add some text for labels, title and custom x-axis tick labels, etc.
+
         fig.tight_layout()
-        fig.savefig("BateriaTeste.png")
+        ax.legend()
+        fig.savefig("BateriaTestes_Davi_Guilherme_Pedro.png")
+
 
 '''
 Esta parte do código cria uma bateria de teste, cadastra as funções
@@ -113,14 +115,14 @@ bt = BateriaTestes()
 otimizador = Otimizador()
 bt.addFuncao(otimizador.singleSwap, "singleSwap")
 bt.addFuncao(otimizador.aleatorio, "aleatorio")
-bt.addFuncao(otimizador.otimizadorGrupo1, "grupo1")
+bt.addFuncao(otimizador.otimizadorGrupo1, "Davi_Guilherme_Pedro")
 
 # tempo_ms = 300
 # repeticoes = 5
 # size = [10,100,500,1000]
 # bt.executa(repeticoes, tempo_ms, size)
 
-tempo_ms = 100 #TODO: voltar pro orignal, que é 3000
+tempo_ms = 3000 #TODO: voltar pro orignal, que é 3000
 repeticoes = 10
 size = [10, 100, 250, 500, 750, 1000]
 bt.executa(repeticoes, tempo_ms, size)

@@ -59,7 +59,7 @@ class Otimizador:
                 swap(rota, pos1, pos2)
             tempo_x += [delta_ms]
             compr_y += [minComprimento]
-        self.ax.plot(tempo_x, compr_y, color='#000000', label="SingleSwap")
+        self.plt.plot(tempo_x, compr_y, color='#000000', label="SingleSwap")
 
     def aleatorio(self, rota: Rota, time_ms: int):
         tempo_x = []
@@ -78,7 +78,7 @@ class Otimizador:
                 minComprimento = rota.comprimento()
             tempo_x += [delta_ms]
             compr_y += [minComprimento]
-        self.ax.plot(tempo_x, compr_y, color='#0A0', label="Random")
+        self.plt.plot(tempo_x, compr_y, color='#0A0', label="Random")
 
     # Aqui você deve usar sua criatividade e propor um algoritmo de
     # otimização. O algoritmo deixado é apenas um exemplo.
@@ -122,7 +122,7 @@ class Otimizador:
                 swap(rota, pos1, pos2)
             tempo_x += [delta_ms]
             compr_y += [minComprimento]
-        self.ax.plot(tempo_x,compr_y, linewidth=3, color='#00A', label="otimizadorGrupo1")
+        self.plt.plot(tempo_x,compr_y, linewidth=3, color='#00A', label="otimizadorGrupo1")
 
     def cleanGraph(self):
         self.plt.clf()
