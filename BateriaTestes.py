@@ -1,6 +1,9 @@
+#Davi Pereira Bergamin - 169753
+#Gui
+#Pedro
+
 from OtimizadorBase import Otimizador
 import matplotlib.pyplot as plt
-from Rota import Rota
 import numpy as np
 from Rota import Rota
 

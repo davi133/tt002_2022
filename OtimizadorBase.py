@@ -1,3 +1,7 @@
+#Davi Pereira Bergamin - 169753
+#Gui
+#Pedro
+
 import random
 from Rota import Rota
 import time
