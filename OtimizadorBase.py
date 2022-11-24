@@ -13,6 +13,10 @@ class Otimizador:
     # se julgar necessário.
     def __init__(self):
         self.plt = pyplot
+        self.fig, self.ax = self.plt.subplots()
+        self.plt.xlabel("Tempo(ms)")
+        self.plt.ylabel("Comprimento (pixel)")
+        self.plt.title("Comprimento versus tempo(ms)")
 
     # Este método de otimização já está implementado.
     # Toda vez que o comprimento for atualizado para um valor menor, é
@@ -55,10 +59,7 @@ class Otimizador:
                 swap(rota, pos1, pos2)
             tempo_x += [delta_ms]
             compr_y += [minComprimento]
-        self.plt.xlabel("Tempo(ms)")
-        self.plt.ylabel("Comprimento (pixel)")
-        self.plt.title("Comprimento versus tempo(ms)")
-        self.plt.plot(tempo_x, compr_y, color='#000000', label="SingleSwap")
+        self.ax.plot(tempo_x, compr_y, color='#000000', label="SingleSwap")
 
     def aleatorio(self, rota: Rota, time_ms: int):
         tempo_x = []
@@ -77,7 +78,7 @@ class Otimizador:
                 minComprimento = rota.comprimento()
             tempo_x += [delta_ms]
             compr_y += [minComprimento]
-        self.plt.plot(tempo_x, compr_y, color='#0A0', label="Random")
+        self.ax.plot(tempo_x, compr_y, color='#0A0', label="Random")
 
     # Aqui você deve usar sua criatividade e propor um algoritmo de
     # otimização. O algoritmo deixado é apenas um exemplo.
@@ -121,8 +122,10 @@ class Otimizador:
                 swap(rota, pos1, pos2)
             tempo_x += [delta_ms]
             compr_y += [minComprimento]
+        self.ax.plot(tempo_x,compr_y, linewidth=3, color='#00A', label="otimizadorGrupo1")
 
-        self.plt.plot(tempo_x,compr_y, color='#00A', label="otimizadorGrupo1")
+    def cleanGraph(self):
+        self.plt.clf()
     # Esta função deve salvar o gráfico. A função não deve ser alterada.
     # O objetivo final é colocar vários algoritmos vindos de grupos diferentes
     # num mesmo gráfico e depois esta função irá salvar a solução com todos os gráficos.

@@ -1,7 +1,8 @@
 from OtimizadorBase import Otimizador
-
-
-
+import matplotlib.pyplot as plt
+from Rota import Rota
+import numpy as np
+from Rota import Rota
 
 class BateriaTestes:
     funcoes = []
@@ -47,13 +48,60 @@ class BateriaTestes:
     '''
 
     def executa(self, n_repeticoes: int, tempo_ms, sizeList):
+        labels = []
+        rotas = dict()
         for size in sizeList:
-            print(f"Criando Rota_"+str(size))
-        for size in sizeList:
+            print(f"Criando Rota_"+str(size))# e labels
+            labels += [size]
+            rota_original = Rota()
+            rota_original.randomCoords(size, 400)
+            rotas[size] = rota_original.copy()
+            opt = Otimizador()
             for otimizador in self.funcoes:
+                otimizador[0](rota_original, tempo_ms)
+            opt.salvaFigura("teste_" + str(size) + ".png")
+            opt.cleanGraph()
+
+        todas_medias = dict()
+        todos_desvios = dict()
+        for size in sizeList:
+            rota = rotas[size]
+            for otimizador in self.funcoes:
+                total = 0
+                all_results = []
                 for rep in range(n_repeticoes):
                     print(f"Repetição {rep} da função {otimizador[1]} com "+str(size)+" vertices")
+                    rota_c = rota.copy()
+                    otimizador[0](rota_c, tempo_ms)
+                    total += rota_c.comprimento()
+                    all_results += [rota_c.comprimento()]
+                todas_medias[otimizador[1]] = todas_medias.get(otimizador[1],[]) +[total/n_repeticoes]
+                todos_desvios[otimizador[1]] = todos_desvios.get(otimizador[1], []) + [np.std(all_results)]
+        #print(json.dumps(todas_medias))
+        self.__makeGraph(todas_medias,todos_desvios,labels)
 
+
+
+    def __makeGraph(self,medias,desvios,labels):
+        plt.clf()
+        plt.style.use("ggplot")
+        fig, ax = plt.subplots()
+        ax.set_ylabel('Custo')
+
+        x = np.arange(len(labels))
+        ax.set_xticks(x, labels)
+
+        width = 0.5  # the width of the bars
+
+        total_width = width / len(medias)
+        i = 0
+        for key in medias:
+            ax.bar(x - total_width / 2 + (i * total_width), medias[key], total_width,yerr=desvios[key], label=key, error_kw=dict(lw=1, capsize=5, capthick=1))
+            i += 1
+
+        # Add some text for labels, title and custom x-axis tick labels, etc.
+        fig.tight_layout()
+        fig.savefig("BateriaTeste.png")
 
 '''
 Esta parte do código cria uma bateria de teste, cadastra as funções
@@ -72,7 +120,7 @@ bt.addFuncao(otimizador.otimizadorGrupo1, "grupo1")
 # size = [10,100,500,1000]
 # bt.executa(repeticoes, tempo_ms, size)
 
-tempo_ms = 3000
+tempo_ms = 100 #TODO: voltar pro orignal, que é 3000
 repeticoes = 10
 size = [10, 100, 250, 500, 750, 1000]
 bt.executa(repeticoes, tempo_ms, size)
